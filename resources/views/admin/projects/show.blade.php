@@ -13,5 +13,7 @@
         <a href="{{ $project->url }}" target="_blank">Vai al progetto Github</a>
 
         <a href="{{ route('admin.projects.index') }}">Torna alla lista completa</a>
+
+        <a href="{{ route('admin.projects.edit', $project) }}">Modifica progetto</a>
     </div>
 @endsection
