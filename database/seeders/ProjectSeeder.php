@@ -23,6 +23,7 @@ class ProjectSeeder extends Seeder
             $newProject->date = $generator->date();
             $newProject->preview = $generator->imageUrl();
             $newProject->description = $generator->paragraph();
+            $newProject->url = 'https://github.com/christianarca27/' . $generator->word() . '.git';
 
             $newProject->save();
         }
