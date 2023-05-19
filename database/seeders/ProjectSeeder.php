@@ -6,6 +6,7 @@ use App\Models\Project;
 use Faker\Generator;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProjectSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class ProjectSeeder extends Seeder
             $newProject->preview = $generator->imageUrl();
             $newProject->description = $generator->paragraph();
             $newProject->url = 'https://github.com/christianarca27/' . $generator->word() . '.git';
+            $newProject->slug = Str::slug($newProject->title);
 
             $newProject->save();
         }

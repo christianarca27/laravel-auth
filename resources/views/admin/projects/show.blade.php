@@ -11,5 +11,7 @@
         <p>{{ $project->description }}</p>
 
         <a href="{{ $project->url }}" target="_blank">Vai al progetto Github</a>
+
+        <a href="{{ route('admin.projects.index') }}">Torna alla lista completa</a>
     </div>
 @endsection
