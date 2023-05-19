@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -27,7 +29,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -38,7 +40,18 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newProject = new Project();
+
+        $newProject->title = $request->title;
+        $newProject->date = (new DateTime())->format('Y-m-d');
+        $newProject->preview = $request->preview;
+        $newProject->description = $request->description;
+        $newProject->url = $request->url;
+        $newProject->slug = Str::slug($newProject->title);
+
+        $newProject->save();
+
+        return redirect()->route('admin.projects.show', $newProject);
     }
 
     /**
