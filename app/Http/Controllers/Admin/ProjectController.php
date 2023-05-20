@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -40,12 +41,13 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validation($request);
+
         $newProject = new Project();
 
-        $form_data = $request->all();
-        $newProject->fill($form_data);
+        $formData = $request->all();
+        $newProject->fill($formData);
 
-        $newProject->date = (new DateTime())->format('Y-m-d');
         $newProject->slug = Str::slug($newProject->title);
 
         $newProject->save();
@@ -84,9 +86,12 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        $form_data = $request->all();
+        $this->validation($request);
 
-        $project->update($form_data);
+        $formData = $request->all();
+        $formData['slug'] = Str::slug($formData['title']);
+
+        $project->update($formData);
 
         return redirect()->route('admin.projects.show', $project);
     }
@@ -102,5 +107,31 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()->route('admin.projects.index');
+    }
+
+    private function validation(Request $request)
+    {
+        $formData = $request->all();
+
+        $validator = Validator::make(
+            $formData,
+            [
+                'title' => 'required|min:5',
+                'date' => 'required',
+                'preview' => 'required',
+                'description' => 'required',
+                'url' => 'required',
+            ],
+            [
+                'title.required' => 'Campo obbligatorio',
+                'title.min' => 'Inserisci almeno 5 caratteri',
+                'date.required' => 'Campo obbligatorio',
+                'preview.required' => 'Campo obbligatorio',
+                'description.required' => 'Campo obbligatorio',
+                'url.required' => 'Campo obbligatorio',
+            ]
+        )->validate();
+
+        return $validator;
     }
 }
